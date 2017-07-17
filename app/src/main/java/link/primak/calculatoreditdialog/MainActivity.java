@@ -8,21 +8,30 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import link.primak.calculatoreditdialog.databinding.CalculatorLayoutBinding;
 
 public class MainActivity extends AppCompatActivity {
     private boolean mIsNewInputValueRequired;
     private String mInputString;
-    private CalcOperation mStackOperation;
-    private Double mStackValue;
-    private String mOperationsString;
+    private List<String> mOperationList;
+    //private String mOperationsString;
+
+    private Double mCalcResult;
+    private CalcOperation mLastOperation;
+    private Double mLastOperand;
+    private boolean mIsCalculationPressed;
 
     private CalculatorLayoutBinding mBinding;
     private static final String REG_EXP  = "-?\\d*\\.?\\d*";
+    private static final double DEFAULT_DOUBLE = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mOperationList = new ArrayList<>();
         mBinding = DataBindingUtil.setContentView(this, R.layout.calculator_layout);
         mBinding.setProcessor(new CalcProcessor());
         onCEClick(mBinding.btnOpCE); // Set initial values
@@ -31,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
     public void onDigitClick(View view) {
         if (view instanceof TextView) {
             TextView textView = (TextView) view;
+
+            // begin new calculation sequence since "=" has been pressed
+            if (mIsCalculationPressed) {
+                mIsCalculationPressed = false;
+                beginCalcSequence();
+            }
 
             String testString;
             // Start new value or change existing one
@@ -62,7 +77,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mBinding.textInput.setText(mInputString);
-        mBinding.textOperations.setText(mOperationsString);
+
+        StringBuilder sb = new StringBuilder();
+        for (String s : mOperationList) {
+            if (s.endsWith(".0")) {
+                sb.append(s.substring(0, s.length() - 2));
+            } else {
+                sb.append(s);
+            }
+            sb.append(" ");
+        }
+
+        mBinding.textOperations.setText(sb.toString());
+    }
+
+    private void beginCalcSequence() {
+        mOperationList.clear();
+        mLastOperation = null;
+        mLastOperand = DEFAULT_DOUBLE;
     }
 
     public void onBackspaceClick(View view) {
@@ -79,9 +111,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onCEClick(View view) {
-        mStackValue = null;
-        mStackOperation = null;
-        mOperationsString = "";
+        beginCalcSequence();
+        mCalcResult = DEFAULT_DOUBLE;
+
         onCClick(mBinding.btnOpC);
     }
 
@@ -100,59 +132,64 @@ public class MainActivity extends AppCompatActivity {
                 case SUBTRACTION: return op1 - op2;
                 case MULTIPLICATION: return op1 * op2;
                 case DIVISION: return op1 / op2;
-                default: return 0.0;
+                default: return DEFAULT_DOUBLE;
             }
         }
 
-
         public void onOperation(View view, CalcOperation operation){
-            // TODO: 17-Jul-17 Нужно переделать алгоритм: нужны три переменных:
-            // Результат вычисления
-            // последняя операция
-            // последний операнд
-            // если mIsNewInputValueRequired == false, то последний операнд обновляется из Input String
-            // В формуле всегда учавствует Результат вычисления, последняя операция, последний операнд
-            // Если mIsNewInputValueRequired == true, то ввод не переносится в последний операнд - это
-            // позволит повторять вычисления по нажатию на клавишу равно.
+            /* If previously Calculation has been pressed we need reset mLastOperation before
+                NEW ARITHMETIC operation
+             */
+            if ((mIsCalculationPressed) && (operation != CalcOperation.CALCULATION)) {
+                beginCalcSequence();
+                mLastOperand = mCalcResult;
+                mOperationList.add(String.valueOf(mLastOperand)); // Result should be kept
+                mOperationList.add(operation.getSymbol()); // Result should be kept
+            }
 
-            // If new input not specified - update operations only
-            if ((mIsNewInputValueRequired) && (operation != CalcOperation.CALCULATION)) {
-                mStackOperation = operation;
-            } else {
-                mIsNewInputValueRequired = true;
-
-                // Retrieve input value
-                Double inputValue;
+            if (!mIsNewInputValueRequired) {
+                // there is an user input need to be passed into mLastOperand
                 try {
-                    inputValue = Double.valueOf(mInputString);
-                    mOperationsString += mInputString + " ";
+                    mLastOperand = Double.valueOf(mInputString);
                 } catch (NumberFormatException nfe) {
                     nfe.printStackTrace();
-                    inputValue = 0.0;
-                    mOperationsString += "0 ";
+                    mLastOperand = DEFAULT_DOUBLE;
                 }
 
-                // Write to the operation string
-                mOperationsString += operation.getSymbol() + " ";
-
-                // Perform previous calculation
-                if ((mStackOperation != null) && (mStackValue != null)) {
-                    Double result = calc(mStackValue, inputValue, mStackOperation);
-                    // swap values to keep operation for repetitive calculations
-                    mStackValue = inputValue;
-                    inputValue = result;
-                }
-
-                // If current operation is calculation - chain of calculation is completed
-                if (operation == CalcOperation.CALCULATION) {
-                    mOperationsString = "";
-                } else {
-                    mStackValue = inputValue;
-                    mStackOperation = operation;
-                }
-
-                mInputString = String.valueOf(inputValue);
+                mOperationList.add(String.valueOf(mLastOperand));
             }
+
+            /* If operation is invoked when mIsNewInputValueRequired == false (with user input)
+              calculation is needed otherwise only update operation
+              Also calculation is invoked when user executes CALCULATION
+               */
+            if (mLastOperation != null) {
+                if ((!mIsNewInputValueRequired) || (operation == CalcOperation.CALCULATION)) {
+                    mCalcResult = calc(mCalcResult, mLastOperand, mLastOperation);
+                }
+            } else {
+                mCalcResult = mLastOperand;
+            }
+
+            // Update operation
+            mIsCalculationPressed = (operation == CalcOperation.CALCULATION);
+            if (!mIsCalculationPressed) {
+                mLastOperation = operation;
+
+                // Update or change sign of operation
+                if (mIsNewInputValueRequired) {
+                    if (mOperationList.size() > 0) {
+                        mOperationList.set(mOperationList.size()-1, mLastOperation.getSymbol());
+                    }
+                } else {
+                    mOperationList.add(mLastOperation.getSymbol());
+                }
+            }
+
+            // After calculation - expect new input from user
+            mIsNewInputValueRequired = true;
+
+            mInputString = String.valueOf(mCalcResult);
 
             showValue();
         }

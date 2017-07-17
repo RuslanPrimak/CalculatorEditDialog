@@ -36,10 +36,9 @@
             style="?android:attr/autoText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
+            android:gravity="end"
             android:maxLines="3"
-            android:padding="8dp"
-            android:visibility="gone"/>
+            android:padding="8dp"/>
 
         <!--Operative row-->
         <LinearLayout
