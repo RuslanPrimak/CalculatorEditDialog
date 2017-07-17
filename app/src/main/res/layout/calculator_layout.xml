@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2017. Ruslan Primak
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  ~ Last modified 7/15/17 10:08 PM
+  -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="link.primak.calculatoreditdialog.CalcOperation" />
+
+        <variable
+            name="processor"
+            type="link.primak.calculatoreditdialog.MainActivity.CalcProcessor" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textOperations"
+            style="?android:attr/autoText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:maxLines="3"
+            android:padding="8dp"
+            android:visibility="gone"/>
+
+        <!--Operative row-->
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textInput"
+                style="?android:attr/editTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:maxEms="8"
+                android:maxLines="3" />
+
+            <ImageButton
+                android:id="@+id/btnBackspace"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/backspace_btn_cd"
+                android:onClick="onBackspaceClick"
+                android:src="@drawable/ic_backspace"
+                android:tint="@color/colorAccent" />
+        </LinearLayout>
+
+        <!--Keypad-->
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnOpCE"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onCEClick"
+                android:text="@string/calc_op_ce" />
+
+            <Button
+                android:id="@+id/btnOpC"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onCClick"
+                android:text="@string/calc_op_c" />
+
+            <Button
+                android:id="@+id/btnOpDivide"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{(theView) -> processor.onOperation(theView, CalcOperation.DIVISION)}"
+                android:text="@string/calc_op_div" />
+
+            <Button
+                android:id="@+id/btnOpMult"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{(theView) -> processor.onOperation(theView, CalcOperation.MULTIPLICATION)}"
+                android:text="@string/calc_op_mul" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnDigit7"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onDigitClick"
+                android:text="@string/calc_digit_7" />
+
+            <Button
+                android:id="@+id/btnDigit8"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onDigitClick"
+                android:text="@string/calc_digit_8" />
+
+            <Button
+                android:id="@+id/btnDigit9"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onDigitClick"
+                android:text="@string/calc_digit_9" />
+
+            <Button
+                android:id="@+id/btnOpSub"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{(theView) -> processor.onOperation(theView, CalcOperation.SUBTRACTION)}"
+                android:text="@string/calc_op_sub" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnDigit4"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onDigitClick"
+                android:text="@string/calc_digit_4" />
+
+            <Button
+                android:id="@+id/btnDigit5"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onDigitClick"
+                android:text="@string/calc_digit_5" />
+
+            <Button
+                android:id="@+id/btnDigit6"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onDigitClick"
+                android:text="@string/calc_digit_6" />
+
+            <Button
+                android:id="@+id/btnOpAdd"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{(theView) -> processor.onOperation(theView, CalcOperation.ADD)}"
+                android:text="@string/calc_op_add" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnDigit1"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onDigitClick"
+                android:text="@string/calc_digit_1" />
+
+            <Button
+                android:id="@+id/btnDigit2"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onDigitClick"
+                android:text="@string/calc_digit_2" />
+
+            <Button
+                android:id="@+id/btnDigit3"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onDigitClick"
+                android:text="@string/calc_digit_3" />
+
+            <Button
+                android:id="@+id/btnOpEqual"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{(theView) -> processor.onOperation(theView, CalcOperation.CALCULATION)}"
+                android:text="@string/calc_op_equ" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnDigit0"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onDigitClick"
+                android:text="@string/calc_digit_0" />
+
+            <Button
+                android:id="@+id/btnDigitDot"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onDigitClick"
+                android:text="@string/calc_op_dot" />
+
+            <Button
+                android:id="@+id/btnDigit00"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onDigitClick"
+                android:text="@string/calc_digit_00" />
+
+            <ImageButton
+                android:id="@+id/btnAccept"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/accept_btn_cd"
+                android:src="@drawable/ic_check_circle"
+                android:tint="@color/colorAccent" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>
