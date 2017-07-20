@@ -19,11 +19,12 @@
 
     <data>
 
-        <import type="link.primak.calculatoreditdialog.CalcOperation" />
+        <import type="link.primak.calculatoreditdialog.CalcProcessor.CalcOperation"/>
+        <import type="android.widget.TextView"/>
 
         <variable
             name="processor"
-            type="link.primak.calculatoreditdialog.MainActivity.CalcProcessor" />
+            type="link.primak.calculatoreditdialog.CalcProcessor" />
     </data>
 
     <LinearLayout
@@ -38,7 +39,8 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:maxLines="3"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:text="@{processor.operationSequence}"/>
 
         <!--Operative row-->
         <LinearLayout
@@ -55,7 +57,8 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:maxEms="8"
-                android:maxLines="3" />
+                android:maxLines="3"
+                android:text="@{processor.inputValue}"/>
 
             <ImageButton
                 android:id="@+id/btnBackspace"
@@ -63,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/backspace_btn_cd"
-                android:onClick="onBackspaceClick"
+                android:onClick="@{() -> processor.backspaceInput()}"
                 android:src="@drawable/ic_backspace"
                 android:tint="@color/colorAccent" />
         </LinearLayout>
@@ -80,7 +83,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onCEClick"
+                android:onClick="@{() -> processor.resetCalculator()}"
                 android:text="@string/calc_op_ce" />
 
             <Button
@@ -88,7 +91,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onCClick"
+                android:onClick="@{() -> processor.clearInputValue()}"
                 android:text="@string/calc_op_c" />
 
             <Button
@@ -96,7 +99,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{(theView) -> processor.onOperation(theView, CalcOperation.DIVISION)}"
+                android:onClick="@{() -> processor.onOperationSelected(CalcOperation.DIVISION)}"
                 android:text="@string/calc_op_div" />
 
             <Button
@@ -104,7 +107,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{(theView) -> processor.onOperation(theView, CalcOperation.MULTIPLICATION)}"
+                android:onClick="@{() -> processor.onOperationSelected(CalcOperation.MULTIPLICATION)}"
                 android:text="@string/calc_op_mul" />
 
         </LinearLayout>
@@ -120,7 +123,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onDigitClick"
+                android:onClick="@{(theView) -> processor.appendInput(((TextView) theView).getText().toString())}"
                 android:text="@string/calc_digit_7" />
 
             <Button
@@ -128,7 +131,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onDigitClick"
+                android:onClick="@{(theView) -> processor.appendInput(((TextView) theView).getText().toString())}"
                 android:text="@string/calc_digit_8" />
 
             <Button
@@ -136,7 +139,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onDigitClick"
+                android:onClick="@{(theView) -> processor.appendInput(((TextView) theView).getText().toString())}"
                 android:text="@string/calc_digit_9" />
 
             <Button
@@ -144,7 +147,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{(theView) -> processor.onOperation(theView, CalcOperation.SUBTRACTION)}"
+                android:onClick="@{() -> processor.onOperationSelected(CalcOperation.SUBTRACTION)}"
                 android:text="@string/calc_op_sub" />
 
         </LinearLayout>
@@ -160,7 +163,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onDigitClick"
+                android:onClick="@{(theView) -> processor.appendInput(((TextView) theView).getText().toString())}"
                 android:text="@string/calc_digit_4" />
 
             <Button
@@ -168,7 +171,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onDigitClick"
+                android:onClick="@{(theView) -> processor.appendInput(((TextView) theView).getText().toString())}"
                 android:text="@string/calc_digit_5" />
 
             <Button
@@ -176,7 +179,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onDigitClick"
+                android:onClick="@{(theView) -> processor.appendInput(((TextView) theView).getText().toString())}"
                 android:text="@string/calc_digit_6" />
 
             <Button
@@ -184,7 +187,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{(theView) -> processor.onOperation(theView, CalcOperation.ADD)}"
+                android:onClick="@{() -> processor.onOperationSelected(CalcOperation.ADD)}"
                 android:text="@string/calc_op_add" />
 
         </LinearLayout>
@@ -200,7 +203,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onDigitClick"
+                android:onClick="@{(theView) -> processor.appendInput(((TextView) theView).getText().toString())}"
                 android:text="@string/calc_digit_1" />
 
             <Button
@@ -208,7 +211,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onDigitClick"
+                android:onClick="@{(theView) -> processor.appendInput(((TextView) theView).getText().toString())}"
                 android:text="@string/calc_digit_2" />
 
             <Button
@@ -216,7 +219,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onDigitClick"
+                android:onClick="@{(theView) -> processor.appendInput(((TextView) theView).getText().toString())}"
                 android:text="@string/calc_digit_3" />
 
             <Button
@@ -224,7 +227,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{(theView) -> processor.onOperation(theView, CalcOperation.CALCULATION)}"
+                android:onClick="@{() -> processor.onOperationSelected(CalcOperation.COMPUTE)}"
                 android:text="@string/calc_op_equ" />
 
         </LinearLayout>
@@ -240,7 +243,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onDigitClick"
+                android:onClick="@{(theView) -> processor.appendInput(((TextView) theView).getText().toString())}"
                 android:text="@string/calc_digit_0" />
 
             <Button
@@ -248,7 +251,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onDigitClick"
+                android:onClick="@{(theView) -> processor.appendInput(((TextView) theView).getText().toString())}"
                 android:text="@string/calc_op_dot" />
 
             <Button
@@ -256,7 +259,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onDigitClick"
+                android:onClick="@{(theView) -> processor.appendInput(((TextView) theView).getText().toString())}"
                 android:text="@string/calc_digit_00" />
 
             <ImageButton
