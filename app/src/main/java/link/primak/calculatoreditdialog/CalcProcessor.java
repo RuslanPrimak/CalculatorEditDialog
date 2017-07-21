@@ -68,7 +68,7 @@ public class CalcProcessor extends BaseObservable {
      * @param inputValue - new value
      */
     public void setInputValue(String inputValue) {
-        if (inputValue.endsWith(".0")) {
+        if (inputValue.endsWith(".0") && mIsNewInputValueRequired) {
             inputValue = inputValue.substring(0, inputValue.length() - 2);
         }
 

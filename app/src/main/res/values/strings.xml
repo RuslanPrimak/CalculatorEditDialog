@@ -1,27 +1,3 @@
 <resources>
     <string name="app_name">Calculator Edit Dialog</string>
-    <string name="accept_btn_cd">Accept</string>
-    <string name="backspace_btn_cd">Backspace</string>
-    <string name="default_double_value">0.00</string>
-
-    <!--Calculator buttons text-->
-    <string name="calc_digit_00">00</string>
-    <string name="calc_digit_0">0</string>
-    <string name="calc_digit_1">1</string>
-    <string name="calc_digit_2">2</string>
-    <string name="calc_digit_3">3</string>
-    <string name="calc_digit_4">4</string>
-    <string name="calc_digit_5">5</string>
-    <string name="calc_digit_6">6</string>
-    <string name="calc_digit_7">7</string>
-    <string name="calc_digit_8">8</string>
-    <string name="calc_digit_9">9</string>
-    <string name="calc_op_div">÷</string>
-    <string name="calc_op_mul">×</string>
-    <string name="calc_op_sub">-</string>
-    <string name="calc_op_add">+</string>
-    <string name="calc_op_equ">=</string>
-    <string name="calc_op_dot">.</string>
-    <string name="calc_op_ce">CE</string>
-    <string name="calc_op_c">C</string>
 </resources>
